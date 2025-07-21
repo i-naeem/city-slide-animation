@@ -4,15 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Custom Swiper Animation</title>
+  <title>City Slide Animation</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap" rel="stylesheet">
   <style>
     html,
     body {
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: sans-serif;
+      font-family: 'Satoshi', sans-serif;
       background: #000;
     }
 
@@ -36,16 +37,20 @@
       height: 100%;
       object-fit: cover;
       z-index: 1;
-      transition: opacity 0.8s ease;
+      transition: opacity 1s ease;
     }
 
     .slide-text {
       position: relative;
       z-index: 3;
-      font-size: 3rem;
-      font-weight: bold;
+      font-size: 8rem;
+      font-weight: 700;
       color: white;
       text-align: center;
+      line-height: 1;
+      max-width: 90%;
+      mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0) 100%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0) 100%);
     }
 
     .overlay {
@@ -58,6 +63,23 @@
       z-index: 2;
       pointer-events: none;
     }
+
+    .swiper-pagination {
+      position: absolute;
+      bottom: 20px;
+      text-align: center;
+      width: 100%;
+      z-index: 5;
+    }
+
+    .swiper-pagination-bullet {
+      background: white;
+      opacity: 0.6;
+    }
+
+    .swiper-pagination-bullet-active {
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -65,25 +87,28 @@
 
   <div class="swiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" data-text="First Slide">
+      <div class="swiper-slide" data-text="Tokyo">
         <img class="background-img"
           src="https://plus.unsplash.com/premium_photo-1680582107403-04dfac02efc3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-        <div class="slide-text">First Slide</div>
+        <div class="slide-text">Tokyo</div>
         <div class="overlay"></div>
       </div>
-      <div class="swiper-slide" data-text="Second Slide">
+      <div class="swiper-slide" data-text="New York">
         <img class="background-img"
           src="https://plus.unsplash.com/premium_photo-1683888229109-17cb0975af20?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-        <div class="slide-text">Second Slide</div>
+        <div class="slide-text">New York</div>
         <div class="overlay"></div>
       </div>
-      <div class="swiper-slide" data-text="Third Slide">
+      <div class="swiper-slide" data-text="Osaka">
         <img class="background-img"
           src="https://plus.unsplash.com/premium_photo-1682048358672-1c5c6c9ed2ae?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-        <div class="slide-text">Third Slide</div>
+        <div class="slide-text">Osaka</div>
         <div class="overlay"></div>
       </div>
     </div>
+
+    <!-- Pagination Dots -->
+    <div class="swiper-pagination"></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
@@ -93,7 +118,11 @@
       loop: true,
       effect: 'fade',
       fadeEffect: { crossFade: true },
-      speed: 1200,
+      speed: 2000, // control transition speed (in ms)
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
       on: {
         slideChangeTransitionStart: () => {
           const previousSlide = swiper.slides[swiper.previousIndex];
@@ -108,7 +137,7 @@
           const overlay = currentSlide.querySelector('.overlay');
 
           // Set initial states
-          gsap.set(nextText, { y: '-50px', opacity: 0 });
+          gsap.set(nextText, { y: '-60px', opacity: 0 });
           gsap.set(overlay, { left: '-100%' });
 
           // Animate
@@ -116,22 +145,22 @@
 
           tl
             .to(prevText, {
-              y: 50,
+              y: 60,
               opacity: 0,
-              duration: 0.6,
+              duration: 1,
               ease: "power2.out"
             }, 0)
 
             .to(nextText, {
               y: 0,
               opacity: 1,
-              duration: 0.8,
+              duration: 1.2,
               ease: "power2.out"
-            }, 0.4)
+            }, 0.6)
 
             .to(prevImg, {
               opacity: 0,
-              duration: 0.8,
+              duration: 1.2,
               ease: "power2.out"
             }, 0)
 
@@ -139,13 +168,13 @@
               opacity: 0
             }, {
               opacity: 1,
-              duration: 0.8,
+              duration: 1.2,
               ease: "power2.out"
             }, 0)
 
             .to(overlay, {
               left: '100%',
-              duration: 1.2,
+              duration: 2,
               ease: "power2.inOut"
             }, 0);
         }
