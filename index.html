@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Swiper Animation</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+      background: #000;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+    }
+
+    .swiper-slide {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .background-img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      transition: opacity 0.8s ease;
+    }
+
+    .slide-text {
+      position: relative;
+      z-index: 3;
+      font-size: 3rem;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: 2;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" data-text="First Slide">
+        <img class="background-img"
+          src="https://plus.unsplash.com/premium_photo-1680582107403-04dfac02efc3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+        <div class="slide-text">First Slide</div>
+        <div class="overlay"></div>
+      </div>
+      <div class="swiper-slide" data-text="Second Slide">
+        <img class="background-img"
+          src="https://plus.unsplash.com/premium_photo-1683888229109-17cb0975af20?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+        <div class="slide-text">Second Slide</div>
+        <div class="overlay"></div>
+      </div>
+      <div class="swiper-slide" data-text="Third Slide">
+        <img class="background-img"
+          src="https://plus.unsplash.com/premium_photo-1682048358672-1c5c6c9ed2ae?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+        <div class="slide-text">Third Slide</div>
+        <div class="overlay"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper', {
+      loop: true,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      speed: 1200,
+      on: {
+        slideChangeTransitionStart: () => {
+          const previousSlide = swiper.slides[swiper.previousIndex];
+          const currentSlide = swiper.slides[swiper.activeIndex];
+
+          const prevText = previousSlide.querySelector('.slide-text');
+          const nextText = currentSlide.querySelector('.slide-text');
+
+          const prevImg = previousSlide.querySelector('.background-img');
+          const nextImg = currentSlide.querySelector('.background-img');
+
+          const overlay = currentSlide.querySelector('.overlay');
+
+          // Set initial states
+          gsap.set(nextText, { y: '-50px', opacity: 0 });
+          gsap.set(overlay, { left: '-100%' });
+
+          // Animate
+          const tl = gsap.timeline();
+
+          tl
+            .to(prevText, {
+              y: 50,
+              opacity: 0,
+              duration: 0.6,
+              ease: "power2.out"
+            }, 0)
+
+            .to(nextText, {
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              ease: "power2.out"
+            }, 0.4)
+
+            .to(prevImg, {
+              opacity: 0,
+              duration: 0.8,
+              ease: "power2.out"
+            }, 0)
+
+            .fromTo(nextImg, {
+              opacity: 0
+            }, {
+              opacity: 1,
+              duration: 0.8,
+              ease: "power2.out"
+            }, 0)
+
+            .to(overlay, {
+              left: '100%',
+              duration: 1.2,
+              ease: "power2.inOut"
+            }, 0);
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
