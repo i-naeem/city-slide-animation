@@ -138,11 +138,11 @@
 
           const overlay = currentSlide.querySelector('.overlay');
 
-          // Set initial states for incoming text and overlay
+          // Set initial state for incoming text
           gsap.set(nextText, {
             y: '-100%',
-            opacity: 1, // Keep opacity at 1 to see both texts clearly
-            zIndex: 4 // Optional: Make sure incoming text overlaps
+            opacity: 1,
+            zIndex: 4
           });
 
           gsap.set(overlay, { left: '-100%' });
@@ -150,7 +150,7 @@
           const tl = gsap.timeline();
 
           tl
-            // Slide outgoing text down and fade slightly
+            // Slide previous text downward
             .to(prevText, {
               y: '100%',
               opacity: 0.2,
@@ -158,15 +158,15 @@
               ease: "power2.inOut"
             }, 0)
 
-            // Slide incoming text in from the top simultaneously
+            // Slide new text downward into place — perfectly synced
             .to(nextText, {
               y: '0%',
               opacity: 1,
               duration: 1.2,
-              ease: "power2.out"
-            }, 0) // Start at same time!
+              ease: "power2.inOut"
+            }, 0)
 
-            // Background image fade
+            // Background fade
             .to(prevImg, {
               opacity: 0,
               duration: 1.2,
@@ -181,7 +181,7 @@
               ease: "power2.out"
             }, 0)
 
-            // Overlay swipe
+            // Overlay
             .to(overlay, {
               left: '100%',
               duration: 2,
@@ -189,6 +189,7 @@
             }, 0);
         }
       }
+
     }
     );
   </script>
