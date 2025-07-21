@@ -120,7 +120,7 @@
       loop: true,
       effect: 'fade',
       fadeEffect: { crossFade: true },
-      speed: 2000, // control transition speed (in ms)
+      speed: 3000, // control transition speed (in ms)
       pagination: {
         el: '.swiper-pagination',
         clickable: true
@@ -139,27 +139,33 @@
           const overlay = currentSlide.querySelector('.overlay');
 
           // Set initial states
-          gsap.set(nextText, { y: '-60px', opacity: 0 });
+          gsap.set(nextText, {
+            y: '-100%',
+            opacity: 0
+          });
           gsap.set(overlay, { left: '-100%' });
 
-          // Animate
+          // Animate like a stack
           const tl = gsap.timeline();
 
           tl
+            // Push previous text down and fade
             .to(prevText, {
-              y: 60,
+              y: '100%',
               opacity: 0,
               duration: 1,
-              ease: "power2.out"
+              ease: "power2.inOut"
             }, 0)
 
+            // Slide in new text from above
             .to(nextText, {
-              y: 0,
+              y: '0%',
               opacity: 1,
               duration: 1.2,
               ease: "power2.out"
-            }, 0.6)
+            }, 0.4)
 
+            // Background image crossfade
             .to(prevImg, {
               opacity: 0,
               duration: 1.2,
@@ -174,6 +180,7 @@
               ease: "power2.out"
             }, 0)
 
+            // Overlay sweep
             .to(overlay, {
               left: '100%',
               duration: 2,
@@ -181,7 +188,8 @@
             }, 0);
         }
       }
-    });
+    }
+    );
   </script>
 </body>
 
